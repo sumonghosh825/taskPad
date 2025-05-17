@@ -1,0 +1,28 @@
+{# templates/authentication/register.html #}
+{% extends 'layouts/base_auth.html' %}
+{% block title %}
+  Email Verify | {{ app_name }}
+{% endblock %}
+
+{% block content %}
+  <div class="my-auto text-center">
+    <!-- Verification Success Message -->
+    <h4 class="text-dark-50 fw-bold">Email Verified Successfully ✅</h4>
+    <p class="text-muted mb-4">
+      Thank you for joining <b>{{ app_name }}</b>!<br />
+      Your email (<b>{{ user.email }}</b>) has been verified.<br />
+      You can now log in and start exploring the platform.
+    </p>
+
+    <!-- Login Button -->
+    <a href="{% url 'login' %}" class="btn btn-primary"><i class="mdi mdi-login"></i> Log In</a>
+  </div>
+
+  <footer class="footer footer-alt">
+    <p class="text-muted">
+      <script>
+        document.write(new Date().getFullYear())
+      </script>© {{ app_name }}
+    </p>
+  </footer>
+{% endblock %}

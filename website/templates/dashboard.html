@@ -1,0 +1,50 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content-page">
+    <div class="content">
+      <!-- Start Content -->
+      <div class="container-fluid">
+        {% include 'layouts/partials/start-title.html' %}
+
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- Profile -->
+            <div class="card bg-primary">
+              <div class="card-body profile-user-box">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <div class="avatar-lg">
+                          <img src="{% static 'assets/images/users/male-avtar.png' %}" alt="" class="rounded-circle img-thumbnail" />
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div>
+                          <h4 class="mt-1 mb-1 text-white">Welcome {{ user.first_name }} !!</h4>
+                          <p class="font-14 text-white-50">
+                            Thank you for use <b>{{ app_name }}</b> 🥰
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div> <!-- end col -->
+
+                  <div class="col-sm-4">
+                    <div class="text-center mt-sm-0 mt-3 text-sm-end">
+                      <button type="button" class="btn btn-light"><i class="mdi mdi-account-edit me-1"></i> Edit Profile</button>
+                    </div>
+                  </div> <!-- end col -->
+                </div> <!-- end row -->
+              </div> <!-- end card-body/ profile-user-box -->
+            </div>
+            <!-- end profile/ card -->
+          </div> <!-- end col -->
+        </div>
+        <!-- end row -->
+      </div> <!-- container -->
+    </div> <!-- content -->
+  </div>
+{% endblock %}
