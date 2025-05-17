@@ -1,36 +1,23 @@
 <!-- Vendor JS -->
- {% load static %}
+{% load static %}
 
 <script src="{% static 'assets/js/vendor.min.js' %}"></script>
 <script src="{% static 'assets/vendor/chart.js/chart.min.js' %}"></script>
 <script src="{% static 'assets/js/pages/demo.profile.js' %}"></script>
 <script src="{% static 'assets/js/app.min.js' %}"></script>
-<script>
-  $(document).on('submit', '#generic-modal-form', function (e) {
-    e.preventDefault();
-
-    const $form = $(this);
-    const url = $form.data('url');
-    const formData = $form.serialize();
-
-    $.ajax({
-      url: url,
-      type: 'POST',
-      data: formData,
-      headers: {
-        'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val(),
-      },
-      success: function (response) {
-        // ✅ Success Handler
-        alert(response.message || "Operation successful.");
-        $('#generic-modal-form').closest('.modal').modal('hide');
-        location.reload(); // Or update DOM without reload
-      },
-      error: function (xhr) {
-        // ❌ Error Handler
-        alert("Something went wrong.");
-        console.log(xhr.responseText);
-      }
-    });
-  });
-</script>
+<script src="{% static 'assets/vendor/highlightjs/highlight.pack.min.js' %}"></script>
+<script src="{% static 'assets/vendor/clipboard/clipboard.min.js' %}"></script>
+<script src="{% static 'assets/js/hyper-syntax.js' %}"></script>
+<script src="{% static 'assets/vendor/select2/js/select2.min.js' %}"></script>
+<script src="{% static 'assets/vendor/daterangepicker/moment.min.js' %}"></script>
+<script src="{% static 'assets/vendor/daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap-timepicker/js/bootstrap-timepicker.min.js' %}"></script>
+<script src="{% static 'assets/vendor/jquery-mask-plugin/jquery.mask.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js' %}"></script>
+<script src="{% static 'assets/vendor/bootstrap-maxlength/bootstrap-maxlength.min.js' %}"></script>
+<script src="{% static 'assets/vendor/handlebars/handlebars.min.js' %}"></script>
+<script src="{% static 'assets/vendor/typeahead.js/typeahead.bundle.min.js' %}"></script>
+<script src="{% static 'assets/vendor/flatpickr/flatpickr.min.js' %}"></script>
+<script src="{% static 'assets/js/pages/demo.typehead.js' %}"></script>
+<script src="{% static 'assets/js/pages/demo.timepicker.js' %}"></script>

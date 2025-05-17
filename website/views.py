@@ -185,3 +185,15 @@ def admin_role(request):
         'roles_with_creator': roles_with_creator,
     }
     return render(request, 'admin/roles/index.html', context)
+
+
+#Task Pages
+@login_required
+def task_index(request):
+    title = "Tasks"
+    return render(request, 'tasks/index.html', {'title': title})
+
+@login_required
+def task_create(request):
+    title = "Tasks Create"
+    return render(request, 'tasks/create.html', {'title': title})

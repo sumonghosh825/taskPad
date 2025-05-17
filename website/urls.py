@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import register_view, register,login , verify_email, login_view, home, admin_user, update_user,admin_role
+from .views import (register_view, register,login , verify_email, login_view, 
+home, admin_user, update_user,admin_role,
+task_index,task_create)
 
 urlpatterns = [
 
@@ -10,10 +12,14 @@ path('sign_in/', login, name='sign_in'),
 path('dashboard/', home, name='dashboard'),
 path('verify/<str:token>/', verify_email, name='verify_email'),
 
-
+#Admin Paths
 path('users/', admin_user, name='users'),
 path('user/update/<int:id>', update_user, name='update_user'),
 
 path('roles/', admin_role, name='roles'),
 
+
+#Tasks Paths
+path('tasks/', task_index, name='tasks'),
+path('tasks/create/', task_create, name='tasks.create'),
 ]
