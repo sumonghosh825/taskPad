@@ -113,19 +113,29 @@ def admin_user(request):
     user_roles = Users_to_Roles.objects.all()
     roles = Role.objects.all()
 
-# Create role dictionary {role_id: role_name}
+    # Create role dictionary {role_id: role_name}
     role_lookup = {role.id: role.name for role in roles}
 
-# Map user_id to a list of role names
+    # Map user_id to a list of role names
     user_roles_map = {}
     for ur in user_roles:
         user_roles_map.setdefault(ur.user_id, []).append(role_lookup.get(ur.roles_id))
+
+    # Prepare list of users with their roles
+    user_with_roles = []
+    for u in users:
+        role_list = user_roles_map.get(u.id, [])
+        user_with_roles.append({
+            'user': u,
+            'roles': role_list,
+        })
+
     context = {
-    'users': users,
-    'user_roles_map': user_roles_map,
-    'title': title,
+        'user_with_roles': user_with_roles,
+        'title': title,
     }
     return render(request, 'admin/users/index.html', context)
+
 
 
 
