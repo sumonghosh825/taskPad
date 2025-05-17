@@ -1,0 +1,65 @@
+{% extends 'layouts/app.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="content-page">
+    <div class="content">
+      <!-- Start Content -->
+      <div class="container-fluid">
+        {% include 'layouts/partials/start-title.html' %}
+
+        <div class="row">
+          <div class="card">
+            <div class="card-body">
+              <div class="tab-content">
+                <div class="tab-pane show active" id="striped-rows-preview">
+                  <div class="table-responsive-sm">
+                    <table class="table table-striped table-centered mb-0">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Status</th>
+                          <th>Created By</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for r in roles_with_creator %}
+                          <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="table-user">{{ r.role.name }}</td>
+
+                            <td>
+                              {% if r.role.status %}
+                                <span class="badge bg-success">Active</span>
+                              {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                              {% endif %}
+                            </td>
+                            <td class="table-user">{{ r.creator.first_name }}</td>
+
+                            <td class="table-action">
+                              <a href="javascript: void(0);" class="action-icon"><i class="mdi mdi-pencil"></i></a>
+                              <a href="javascript: void(0);" class="action-icon"><i class="mdi mdi-delete"></i></a>
+                            </td>
+                          </tr>
+                        {% empty %}
+                          <tr>
+                            <td colspan="5" class="text-center">No users found.</td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div> <!-- end table-responsive -->
+                </div> <!-- end preview -->
+              </div> <!-- end tab-content -->
+            </div> <!-- end card body -->
+          </div> <!-- end card -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trigger Button (inside user loop) -->
+{% endblock %}

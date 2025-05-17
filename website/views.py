@@ -129,17 +129,49 @@ def admin_user(request):
 
 
 
-
 @csrf_exempt  # Optional if using CSRFToken in AJAX headers
 def update_user(request, id):
     if request.method == 'POST':
         user = get_object_or_404(Profile, id=id)
+        user_role = get_object_or_404(Users_to_Roles, user_id = id)
         role = request.POST.get('role')
         is_active = request.POST.get('is_active')
 
-        user.role = role
+        user_role.roles_id = role
         user.is_active = bool(int(is_active))
         user.save()
-
+        user_role.save()
         return JsonResponse({'message': 'User updated successfully.'})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.contrib.auth.models import User
+from .models import Role
+
+@login_required
+def admin_role(request):
+    title = "Roles"
+    roles = Role.objects.all()
+
+    # Get all user IDs from roles
+    user_ids = [role.created_by for role in roles if role.created_by]
+
+    # Fetch all users matching those IDs
+    users = User.objects.filter(id__in=user_ids)
+    user_map = {user.id: user for user in users}
+
+    # Attach matched creator to each role
+    roles_with_creator = []
+    for role in roles:
+        creator = user_map.get(role.created_by)
+        roles_with_creator.append({
+            'role': role,
+            'creator': creator
+        })
+
+    context = {
+        'title': title,
+        'roles_with_creator': roles_with_creator,
+    }
+    return render(request, 'admin/roles/index.html', context)
