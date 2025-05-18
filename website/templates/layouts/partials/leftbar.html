@@ -77,17 +77,29 @@
       </li>
 
       <li class="side-nav-item">
-        <a data-bs-toggle="collapse" href="#sidebarAdmin" aria-expanded="false" aria-controls="sidebarAdmin" class="side-nav-link">
+        <a data-bs-toggle="collapse" href="#sidebarTask" aria-expanded="false" aria-controls="sidebarTask" class="side-nav-link">
           <i class="ri-file-list-3-line"></i>
           <span>Tasks</span>
           <span class="menu-arrow"></span>
         </a>
-        <div class="collapse" id="sidebarAdmin">
+        <div class="collapse" id="sidebarTask">
           <ul class="side-nav-second-level">
             <li>
               <a href="{% url 'tasks' %}">
                 <i class="ri-list-check-2"></i>
                 <span>Lists</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="ri-article-line"></i>
+                <span>Details</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'tasks.create' %}">
+                <i class="ri-add-circle-line"></i>
+                <span>Create</span>
               </a>
             </li>
           </ul>
