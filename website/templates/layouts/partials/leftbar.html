@@ -38,7 +38,7 @@
       <li class="side-nav-title">Navigation</li>
 
       <li class="side-nav-item">
-        <a href="{% url "dashboard" %}" class="side-nav-link">
+        <a href="{% url 'dashboard' %}" class="side-nav-link">
           <i class="uil-home-alt"></i>
           <span>Dashboards</span>
         </a>
@@ -55,10 +55,40 @@
         <div class="collapse" id="sidebarAdmin">
           <ul class="side-nav-second-level">
             <li>
-              <a href="{% url "users" %}">Users</a>
+              <a href="{% url 'users' %}">
+                <i class="ri-user-6-fill"></i>
+                <span>Users</span>
+              </a>
             </li>
             <li>
-              <a href="{% url "roles" %}">Roles</a>
+              <a href="{% url 'teams' %}">
+                <i class="ri-team-fill"></i>
+                <span>Teams</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'roles' %}">
+                <i class="ri-account-pin-box-fill"></i>
+                <span>Roles</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="side-nav-item">
+        <a data-bs-toggle="collapse" href="#sidebarAdmin" aria-expanded="false" aria-controls="sidebarAdmin" class="side-nav-link">
+          <i class="ri-file-list-3-line"></i>
+          <span>Tasks</span>
+          <span class="menu-arrow"></span>
+        </a>
+        <div class="collapse" id="sidebarAdmin">
+          <ul class="side-nav-second-level">
+            <li>
+              <a href="{% url 'tasks' %}">
+                <i class="ri-list-check-2"></i>
+                <span>Lists</span>
+              </a>
             </li>
           </ul>
         </div>

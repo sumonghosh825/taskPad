@@ -1,0 +1,75 @@
+<div class="modal fade team-modal-content" id="add-new-team-modal" tabindex="-1" role="dialog" aria-labelledby="NewTeamModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="NewTeamModalLabel">Add New Team</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="create-team-form" class="p-2" method="post">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label">Team Name</label>
+            <input type="text" class="form-control form-control-light" name="team_name" placeholder="Enter team name" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select form-control-light" name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Members</label>
+            <select class="form-select" name="members" multiple>
+              {% for user in users %}
+                <option value="{{ user.id }}">{{ user.first_name }}</option>
+              {% endfor %}
+            </select>
+            <small class="text-muted">Hold Ctrl (Windows) or Cmd (Mac) to select multiple members.</small>
+          </div>
+
+          <div class="text-end">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Create Team</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('create-team-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("{% url 'create_team' %}", {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message); // or use a toast
+            location.reload();   // refresh the page to show the new team
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+    });
+});
+</script>

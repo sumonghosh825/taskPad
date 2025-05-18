@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (register_view, register,login , verify_email, login_view, 
 home, admin_user, update_user,admin_role,
+admin_team, delete_team, update_team, create_team,
 task_index,task_create)
 
 urlpatterns = [
@@ -18,6 +19,10 @@ path('user/update/<int:id>', update_user, name='update_user'),
 
 path('roles/', admin_role, name='roles'),
 
+path('teams/', admin_team, name='teams'),
+path('teams/delete/<int:team_id>/', delete_team, name='delete_team'),
+path('teams/update/<int:team_id>/', update_team, name='update_team'),
+path('teams/create/', create_team, name='create_team'),
 
 #Tasks Paths
 path('tasks/', task_index, name='tasks'),

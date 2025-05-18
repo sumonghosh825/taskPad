@@ -1,0 +1,75 @@
+<div class="modal fade" id="edit-team-modal" tabindex="-1" role="dialog" aria-labelledby="editTeamModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <form id="edit-team-form-{{ team.id }}" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="editTeamModalLabel{{ team.id }}">Edit Team - {{ team.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Team Name</label>
+            <input type="text" class="form-control" name="team_name" value="{{ team.name }}" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+              <option value="1" {% if team.status == 1 %}selected{% endif %}>Active</option>
+              <option value="0" {% if team.status == 0 %}selected{% endif %}>Inactive</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Members</label>
+            <select class="form-select" name="members" multiple>
+              {% for user in users %}
+                <option value="{{ user.id }}">{{ user.first_name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Update Team</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll("form[id^='edit-team-form-']").forEach(function(form) {
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const teamId = form.id.replace('edit-team-form-', '');
+    const formData = new FormData(form);
+
+    fetch(`/update-team/${teamId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value,
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert(data.message);
+        location.reload();
+      } else {
+        alert('Error: ' + data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An unexpected error occurred.');
+    });
+  });
+});
+</script>

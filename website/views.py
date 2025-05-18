@@ -11,7 +11,7 @@ from django.contrib import messages
 import uuid
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Profile, Role, Users_to_Roles
+from .models import Profile, Role, Users_to_Roles, Teams, Projects
 from django.contrib.auth.decorators import login_required
 
 # Show registration form
@@ -154,10 +154,6 @@ def update_user(request, id):
         return JsonResponse({'message': 'User updated successfully.'})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from .models import Role
 
 @login_required
 def admin_role(request):
@@ -187,6 +183,93 @@ def admin_role(request):
     return render(request, 'admin/roles/index.html', context)
 
 
+@login_required
+def admin_team(request):
+    title = "Teams"
+    teams = Teams.objects.all()
+    users = User.objects.all()
+
+    # Step 1: Collect all created_by user IDs from the teams
+    creator_ids = [team.created_by for team in teams if team.created_by]
+
+    # Step 2: Fetch user objects in bulk
+    creators = User.objects.filter(id__in=creator_ids)
+    creator_map = {user.id: user for user in creators}
+
+    teams_data = []
+
+    for team in teams:
+        # Step 3: Resolve members
+        member_names = []
+        if team.member:
+            member_ids = [int(uid) for uid in team.member.split(',') if uid.strip().isdigit()]
+            member_users = User.objects.filter(id__in=member_ids)
+            member_names = [user.first_name for user in member_users]
+
+        # Step 4: Resolve created_by user
+        creator = creator_map.get(team.created_by)
+        creator_name = f"{creator.first_name} {creator.last_name}" if creator else "N/A"
+
+        # Step 5: Append final data
+        teams_data.append({
+            'id': team.id,
+            'name': team.name,
+            'status': team.status,
+            'members': member_names,
+            'created_by': creator_name,
+        })
+
+    return render(request, 'admin/teams/index.html', {
+        'title': title,
+        'teams_data': teams_data,
+        'users': users,
+    })
+
+@login_required
+def create_team(request):
+    if request.method == 'POST':
+        try:
+            name = request.POST.get('team_name') or None
+            status_str = request.POST.get('status')
+            status = True if status_str == '1' else False if status_str == '0' else None
+            members = request.POST.getlist('members')
+            members_str = ','.join(members) if members else None
+            created_by = request.user.id
+            Teams.objects.create(
+                name=name,
+                status=status,
+                member=members_str,
+                created_by=created_by
+            )
+
+            return JsonResponse({'success': True, 'message': 'Team created successfully'})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
+
+
+@login_required
+def update_team(request, team_id):
+    team = get_object_or_404(Teams, id=team_id)
+
+    if request.method == 'POST':
+        team.name = request.POST.get('team_name') or team.name
+        team.status = request.POST.get('status') == '1'
+        members = request.POST.getlist('members')
+        team.members = ','.join(members) if members else None
+        team.save()
+
+    return redirect('teams')
+
+
+@login_required
+def delete_team(request, team_id):
+    team = get_object_or_404(Teams, id=team_id)
+    team.delete()
+    return redirect('teams')
+
 #Task Pages
 @login_required
 def task_index(request):
@@ -197,3 +280,5 @@ def task_index(request):
 def task_create(request):
     title = "Tasks Create"
     return render(request, 'tasks/create.html', {'title': title})
+
+
