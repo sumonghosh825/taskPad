@@ -281,4 +281,7 @@ def task_create(request):
     title = "Tasks Create"
     return render(request, 'tasks/create.html', {'title': title})
 
+@login_required
+def profile_view(request):
+    return render(request, 'profile/profile.html')
 
